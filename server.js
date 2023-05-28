@@ -1,4 +1,3 @@
-
 const express = require('express');
 const session = require('express-session');
 const exphbs = require('express-handlebars');
@@ -26,9 +25,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes
-app.use(require('./all-controllers/homeController'));
-app.use(require('./all-controllers/postController'));
-app.use(require('./all-controllers/userController'));
+const homeRoutes = require('./all-controllers/homeController');
+const postRoutes = require('./all-controllers/postController');
+const userRoutes = require('./all-controllers/userController');
+
+app.use('/', homeRoutes);
+app.use('/post', postRoutes());
+app.use('/user', userRoutes());
 
 // Start the server
 app.listen(PORT, () => {
