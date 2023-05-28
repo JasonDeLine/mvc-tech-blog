@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3000;
 
 // Set up session middleware
 app.use(session({
-  secret: 'your-secret-key',
+  secret: 'yourSecretKey',
   resave: false,
   saveUninitialized: true
 }));
