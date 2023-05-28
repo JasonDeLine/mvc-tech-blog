@@ -26,7 +26,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes
-app.use(require('./controllers'));
+app.use(require('./all-controllers/homeController'));
+app.use(require('./all-controllers/postController'));
+app.use(require('./all-controllers/userController'));
 
 // Start the server
 app.listen(PORT, () => {
