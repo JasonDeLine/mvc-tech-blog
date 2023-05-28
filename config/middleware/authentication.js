@@ -2,7 +2,7 @@
 
 const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
-const { User } = require('../models'); // Assuming you have a User model defined
+const { User } = require('../../models'); // Assuming you have a User model defined
 
 // Set up session and session store
 const sessionOptions = {
@@ -22,13 +22,33 @@ const sessionOptions = {
 // Initialize session middleware
 const authentication = session(sessionOptions);
 
-// Custom middleware to check if the user is logged in
-const withAuth = (req, res, next) => {
-  if (!req.session.userId) {
-    // If user is not logged in, redirect to the login page or send an error response
-    return res.redirect('/login'); // TO DO: Modify the route as per application's routes
+//  middleware to check if user is logged in
+const withAuth = async (req, res, next) => {
+  try {
+    if (!req.session.userId) {
+      return res.redirect('/login'); 
+    }
+
+    // Fetch the user from  database based on the session userId
+    const user = await User.findByPk(req.session.userId);
+
+    if (!user) {
+          return res.redirect('/login');
+    }
+
+    // User is authenticated, proceed to the next middleware
+    req.user = user;
+
+    const userPosts = await user.getPosts();
+    console.log(user.username);
+    console.log(userPosts);
+
+    next();
+  } catch (error) {
+    // Handle any auth errors
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' }); // Update the error response as per your application's needs
   }
-  next();
 };
 
 module.exports = { authentication, withAuth };
