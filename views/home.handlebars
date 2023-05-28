@@ -1,0 +1,21 @@
+{{#if user}}
+<h2>Welcome, {{user.username}}!</h2>
+{{else}}
+<h2>Welcome to the Tech Blog!</h2>
+<p>Please log in or sign up to access the full features of the site.</p>
+{{/if}}
+
+{{#if posts.length}}
+<h3>Latest Posts:</h3>
+<ul class="list-group">
+    {{#each posts}}
+    <li class="list-group-item">
+        <h4>{{title}}</h4>
+        <p>By {{user.username}} | {{createdAt}}</p>
+        <a href="/post/{{id}}">View Post</a>
+    </li>
+    {{/each}}
+</ul>
+{{else}}
+<p>No posts found.</p>
+{{/if}}
